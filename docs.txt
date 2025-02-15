@@ -1,0 +1,100 @@
+Basic Podman Commands:
+
+
+podman machine init
+podman machine start
+
+podman build -t my-python-app .; podman stop --all; podman rm --all
+
+
+podman run --name project1 -e AIPROXY_TOKEN="" -p 8000:8000 my-python-app
+
+podman exec -it project1 /bin/bash
+podman ps --pod
+
+------------------
+Curl commands :
+
+
+IMMUTABILITY: cant delete files check
+curl -X GET "http://localhost:8000/read?path=/data/.immutable_flag"
+
+A0: no parameter task , error scenario
+curl -X POST "http://localhost:8000/run"
+
+A1: 
+curl -X POST "http://localhost:8000/run" \
+     -H "Content-Type: application/json" \
+     -d '{"task": "Install uv (if required) and run https://raw.githubusercontent.com/sanand0/tools-in-data-science-public/tds-2025-01/project-1/datagen.py with ${user.email} as the only argument."}'
+
+
+A2:
+curl -X POST "http://localhost:8000/run" \
+     -H "Content-Type: application/json" \
+     -d '{"task": "Format the contents of /data/format.md using prettier@3.4.2, updating the file in-place"}'
+curl -X GET "http://localhost:8000/read?path=/data/format.md"
+
+
+A3: tamil as query parameter, as body parameter  { no clarity in question if its query or body parameter. so handle both cases}
+curl -X POST "http://localhost:8000/run?task=%2Fdata%2Fcontents.log%E0%AE%B2%20%E0%AE%8E%E0%AE%A4%E0%AF%8D%E0%AE%A4%E0%AE%A9%E0%AF%88%20%E0%AE%9E%E0%AE%BE%E0%AE%AF%E0%AE%BF%E0%AE%B1%E0%AF%81%20%E0%AE%87%E0%AE%B0%E0%AF%81%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AF%81%E0%AE%A8%E0%AF%81%20%E0%AE%95%E0%AE%A3%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AF%81%20%E0%AE%AA%E0%AF%8B%E0%AE%9F%E0%AF%8D%E0%AE%9F%E0%AF%81%2C%20%E0%AE%85%E0%AE%A4%E0%AF%88%20%2Fdata%2Fcontents.dates%E0%AE%B2%20%E0%AE%8E%E0%AE%B4%E0%AF%81%E0%AE%A4%E0%AF%81"
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "/data/contents.logல எத்தனை ஞாயிறு இருக்குனு கணக்கு போட்டு, அதை /data/contents.datesல எழுது"
+}'
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "/data/dates.txt में कितने रविवार हैं? गिनो और /data/contents.dates में लिखो"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/contents.dates"
+
+A4:
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "Sort the array of contacts in /data/contacts.json by last_name, then first_name, and write the result to /data/contacts-sorted.json"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/contacts-sorted.json"
+
+A5:
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "Write the first line of the 10 most recent .log file in /data/logs/ to /data/logs-recent.txt, most recent first"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/logs-recent.txt"
+
+A6:
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "Find all Markdown (.md) files in /data/docs/. For each file, extract the first occurrence of each H1 (i.e. a line starting with # ). Create an index file /data/docs/index.json that maps each filename (without the /data/docs/ prefix) to its title. "
+}'
+curl -X GET "http://localhost:8000/read?path=/data/docs/index.json"
+
+A7:
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "/data/email.txt contains an email message. Pass the content to an LLM with instructions to extract the sender’s email address, and write just the email address to /data/email-sender.txt"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/email-sender.txt"
+
+
+A8: 
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "/data/credit_card.png contains a credit card number. Pass the image to an LLM, have it extract the card number, and write it without spaces to /data/credit-card.txt"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/credit-card.txt"
+
+
+A9: 
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "/data/comments.txt contains a list of comments, one per line. Using embeddings, find the most similar pair of comments and write them to /data/comments-similar.txt"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/comments-similar.txt"
+
+
+A10: 
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "The SQLite database file /data/ticket-sales.db has a tickets with columns type, units, and price. Each row is a customer bid for a concert ticket. What is the total sales of all the items in the “Gold” ticket type? Write the number in /data/ticket-sales-gold.txt"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/ticket-sales-gold.txt"
+
+
+B3: 
+curl -X POST "http://localhost:8000/run" -H "Content-Type: application/json" -d '{
+  "task": "Fetch data from an API , http://jsonplaceholder.typicode.com/users and save it in /data/api-output.txt"
+}'
+curl -X GET "http://localhost:8000/read?path=/data/api-output.txt"
+
+
